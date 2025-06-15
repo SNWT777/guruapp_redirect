@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переход в Настройки</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; text-align: center; flex-direction: column; }
+        .container { padding: 20px; }
+        a { display: inline-block; padding: 15px 30px; font-size: 18px; font-weight: bold; color: #fff; background-color: #007aff; border-radius: 12px; text-decoration: none; }
+        p { color: #666; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="prefs:root=APPLE_ACCOUNT&path=STORE">🚀 Нажмите, чтобы открыть Настройки</a>
+        <p>Вас перенаправит в раздел настроек App Store.</p>
+    </div>
+    <!-- Небольшой скрипт для автоматического редиректа, если это возможно -->
+    <script>
+        window.location.href = "prefs:root=APPLE_ACCOUNT&path=STORE";
+    </script>
+</body>
+</html>
