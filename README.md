@@ -1,1 +1,0 @@
-# guruapp_redirect
