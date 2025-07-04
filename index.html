@@ -4,102 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Открываем GuruApp...</title>
+    <!-- Для лучшей типографики (опционально) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Можно использовать кастомный шрифт, если есть, или оставить системный -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Светлая тема */
-            --bg-grad-start: #e9eef2;
-            --bg-grad-end: #f5f7fa;
-            --card-bg: #ffffff;
-            --card-shadow: 0 16px 40px rgba(0, 38, 77, 0.1);
-            --text-primary: #0a1929;
+            --bg-color: #f4f7fc;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-shadow: 0 20px 50px rgba(50, 75, 120, 0.1);
+            --text-primary: #1d2b48;
             --text-secondary: #5a6b7b;
             --accent-color: #007aff;
             --accent-color-hover: #0062cc;
+            --backdrop-blur: 16px;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
                 /* Темная тема */
-                --bg-grad-start: #1c2530;
-                --bg-grad-end: #0f141a;
-                --card-bg: #1d2836;
-                --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+                --bg-color: #0d1117;
+                --card-bg: rgba(29, 36, 48, 0.75);
+                --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
                 --text-primary: #e6f1ff;
                 --text-secondary: #9cb3d0;
             }
         }
 
         body {
-            /* Используем Manrope, если подключен, иначе - лучший системный шрифт */
-            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
+            background-color: var(--bg-color);
             color: var(--text-primary);
-        }
-
-        .container {
-            background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: var(--card-shadow);
-            text-align: center;
-            max-width: 340px;
-            width: 90%;
-            box-sizing: border-box;
-        }
-
-        /* --- Анимированный логотип-загрузчик --- */
-        .logo-loader {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 25px;
+            overflow: hidden;
         }
         
-        .logo-placeholder {
+        #constellation-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--accent-color);
-            border-radius: 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 40px;
-            font-weight: 700;
-            color: white;
-            /* Замените 'G' на первую букву вашего приложения */
-            z-index: 2;
-            position: relative;
-        }
-        
-        .pulse-ring {
-            position: absolute;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            border: 4px solid rgba(0, 122, 255, 0.2);
-            border-radius: 30px;
-            animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
-            z-index: 1;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(0.9); opacity: 1; }
-            100% { transform: scale(1.6); opacity: 0; }
+            z-index: 0;
         }
 
-        /* --- Стили текста и кнопки --- */
+        .card {
+            position: relative;
+            background-color: var(--card-bg);
+            backdrop-filter: blur(var(--backdrop-blur));
+            -webkit-backdrop-filter: blur(var(--backdrop-blur));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            max-width: 360px;
+            width: 90%;
+            box-sizing: border-box;
+            z-index: 1;
+            overflow: hidden;
+            animation: card-enter 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        
+        @keyframes card-enter {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .content-wrapper {
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .state {
+            position: absolute;
+            width: 100%;
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+        
+        .state.visible { opacity: 1; transform: translateY(0); }
+        .state:not(.visible) { opacity: 0; transform: translateY(10px); pointer-events: none; }
+        .state.exit { transform: translateY(-10px); }
+
+        /* --- Стили для контента --- */
+        .icon { width: 48px; height: 48px; color: var(--accent-color); margin-bottom: 20px; }
+        
         h1 {
             font-size: 1.6rem;
             font-weight: 700;
-            margin: 0 0 10px;
+            margin: 0 0 12px;
         }
 
         p {
@@ -107,7 +109,34 @@
             color: var(--text-secondary);
             margin: 0;
             line-height: 1.6;
+            min-height: 50px; /* Резервируем место под текст */
         }
+        
+        /* Анимированный текст загрузки */
+        .loading-text span {
+            opacity: 0;
+            animation: text-fade 4.5s infinite;
+        }
+        .loading-text span:nth-child(1) { animation-delay: 0s; }
+        .loading-text span:nth-child(2) { animation-delay: 1.5s; }
+        .loading-text span:nth-child(3) { animation-delay: 3.0s; }
+
+        @keyframes text-fade {
+            0% { opacity: 0; }
+            15% { opacity: 1; }
+            33% { opacity: 1; }
+            48% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        .qr-code {
+            margin-top: 20px;
+            background: white;
+            padding: 12px;
+            border-radius: 16px;
+            display: inline-block;
+        }
+        .qr-code img { display: block; width: 150px; height: 150px; }
         
         .button-primary {
             display: inline-block;
@@ -115,70 +144,70 @@
             color: white;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1rem;
             padding: 14px 28px;
             border-radius: 12px;
-            margin-top: 25px;
+            margin-top: 20px;
             transition: all 0.25s ease;
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
         }
-        
-        .button-primary:hover, .button-primary:focus {
-            background-color: var(--accent-color-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0, 122, 255, 0.25);
-        }
-        
-        /* --- Управление видимостью и анимациями --- */
-        .hidden {
-            display: none;
-        }
+        .button-primary:hover { background-color: var(--accent-color-hover); transform: translateY(-2px); }
 
-        /* Анимация появления для fallback блока */
-        .fallback-state.visible > * {
-            opacity: 0;
-            transform: translateY(15px);
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-        
-        /* Задержка для последовательного появления */
-        .fallback-state.visible h1 { animation-delay: 0.1s; }
-        .fallback-state.visible p { animation-delay: 0.2s; }
-        .fallback-state.visible a { animation-delay: 0.3s; }
-        
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        noscript {
+            position: absolute;
+            bottom: 20px;
+            background-color: var(--card-bg);
+            padding: 10px;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Начальное состояние -->
-        <div id="initial-state">
-            <div class="logo-loader">
-                <div class="logo-placeholder">G</div>
-                <div class="pulse-ring"></div>
-            </div>
-            <h1>Подготавливаем ваш переход...</h1>
-            <p>Это займет всего секунду.</p>
-        </div>
+    <canvas id="constellation-bg"></canvas>
 
-        <!-- Состояние, если переход не удался -->
-        <div id="fallback-state" class="hidden">
-            <h1>Не удалось открыть приложение?</h1>
-            <p>Ничего страшного. Вы можете установить GuruApp или открыть его вручную из официального магазина.</p>
-            <a id="store-link" href="#" class="button-primary">Перейти в магазин</a>
+    <div class="card">
+        <div class="content-wrapper">
+            <!-- Начальное состояние -->
+            <div id="initial-state" class="state">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.711 9.28926C15.933 10.5113 15.933 12.4887 14.711 13.7107C13.489 14.9327 11.511 14.9327 10.289 13.7107C9.06697 12.4887 9.06697 10.5113 10.289 9.28926C11.511 8.06726 13.489 8.06726 14.711 9.28926" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <h1>Запуск GuruApp</h1>
+                <p class="loading-text">
+                    <span>Подключаемся к сервису...</span>
+                    <span>Проверяем приложение...</span>
+                    <span>Почти готово...</span>
+                </p>
+            </div>
+
+            <!-- Состояние для мобильных, если переход не удался -->
+            <div id="fallback-state" class="state">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.25 6.75L4.75 12L10.25 17.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.25 12H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <h1>Упс, что-то пошло не так</h1>
+                <p>Не удалось открыть приложение автоматически. Вы можете сделать это вручную.</p>
+                <a id="mobile-store-link" href="#" class="button-primary">Открыть в App/Play Store</a>
+            </div>
+
+            <!-- Состояние для десктопа -->
+            <div id="desktop-state" class="state">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 3H4C3.44772 3 3 3.44772 3 4V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 3H20C20.5523 3 21 3.44772 21 4V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 21H4C3.44772 21 3 20.5523 3 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 21H20C20.5523 21 21 20.5523 21 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <h1>Откройте на телефоне</h1>
+                <p>Наведите камеру смартфона на QR-код, чтобы продолжить.</p>
+                <div class="qr-code">
+                    <img id="qr-code-img" src="" alt="QR Code">
+                </div>
+            </div>
         </div>
     </div>
+    
+    <noscript>
+        <p>Для работы этой страницы необходим JavaScript.</p>
+    </noscript>
 
     <script>
-        (function() {
-            // --- Конфигурация ---
-            const config = {
+        /**
+         * AppRedirect - Модуль для управления редиректом в мобильное приложение.
+         * Версия: 4.0
+         */
+        const AppRedirect = {
+            config: {
                 ios: {
                     appUrl: 'rewardguru://',
                     storeUrl: 'https://apps.apple.com/ru/app/guruapp-работа-на-дому/id1518650617'
@@ -187,64 +216,191 @@
                     appUrl: 'intent://open#Intent;package=com.advertapp.android;scheme=rewardguru;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.advertapp.android;end',
                     storeUrl: 'https://play.google.com/store/apps/details?id=com.advertapp.android'
                 },
-                desktopStoreUrl: 'https://apps.apple.com/ru/app/guruapp-работа-на-дому/id1518650617'
-            };
+                timeout: 2500 // Время ожидания редиректа в мс
+            },
 
-            // --- Элементы DOM ---
-            const initialState = document.getElementById('initial-state');
-            const fallbackState = document.getElementById('fallback-state');
-            const storeLink = document.getElementById('store-link');
-            
-            // --- Логика редиректа ---
-            const ua = navigator.userAgent.toLowerCase();
-            const isIOS = /iphone|ipad|ipod/.test(ua);
-            const isAndroid = /android/.test(ua);
-            
-            let platformConfig;
+            dom: {
+                initialState: document.getElementById('initial-state'),
+                fallbackState: document.getElementById('fallback-state'),
+                desktopState: document.getElementById('desktop-state'),
+                mobileStoreLink: document.getElementById('mobile-store-link'),
+                qrCodeImg: document.getElementById('qr-code-img'),
+                allStates: document.querySelectorAll('.state')
+            },
 
-            if (isIOS) {
-                platformConfig = config.ios;
-            } else if (isAndroid) {
-                platformConfig = config.android;
-            } else {
-                // Обработка десктопа
-                initialState.classList.add('hidden');
-                fallbackState.classList.remove('hidden');
-                fallbackState.classList.add('visible'); // Добавляем класс для анимации
-                fallbackState.querySelector('h1').innerText = 'Только для мобильных';
-                fallbackState.querySelector('p').innerText = 'Откройте эту страницу на своем iPhone или Android-смартфоне.';
-                storeLink.href = config.desktopStoreUrl;
-                storeLink.innerText = 'Узнать больше';
-                return;
-            }
+            init() {
+                this.detectPlatform();
+                this.initConstellation();
+            },
 
-            storeLink.href = platformConfig.storeUrl;
-            
-            let timer;
+            detectPlatform() {
+                const ua = navigator.userAgent.toLowerCase();
+                const isMobile = /iphone|ipad|ipod|android/.test(ua);
 
-            // Функция, которая покажет запасной вариант
-            const showFallback = () => {
-                initialState.classList.add('hidden');
-                fallbackState.classList.remove('hidden');
-                fallbackState.classList.add('visible'); // Запускаем анимацию появления
-            };
-
-            // Слушаем событие: если вкладка стала невидимой, значит, редирект сработал.
-            // В этом случае отменяем показ запасного варианта.
-            const handleVisibilityChange = () => {
-                if (document.hidden) {
-                    clearTimeout(timer);
+                if (isMobile) {
+                    const isIOS = /iphone|ipad|ipod/.test(ua);
+                    const platform = isIOS ? 'ios' : 'android';
+                    this.attemptRedirect(platform);
+                } else {
+                    this.showDesktopInstructions();
                 }
-            };
-            document.addEventListener('visibilitychange', handleVisibilityChange);
-
-            // Устанавливаем таймер. Если за 2.5 секунды вкладка не стала невидимой,
-            // считаем, что редирект не удался, и показываем fallback.
-            timer = setTimeout(showFallback, 2500);
+            },
             
-            // Пытаемся открыть приложение
-            window.location.href = platformConfig.appUrl;
-        })();
+            // Плавное переключение между состояниями
+            switchState(newState) {
+                this.dom.allStates.forEach(state => {
+                    if (state.id === newState) {
+                        state.classList.remove('exit');
+                        state.classList.add('visible');
+                    } else if (state.classList.contains('visible')) {
+                        state.classList.remove('visible');
+                        state.classList.add('exit');
+                    }
+                });
+            },
+
+            attemptRedirect(platform) {
+                this.switchState('initial-state');
+                const platformConfig = this.config[platform];
+                this.dom.mobileStoreLink.href = platformConfig.storeUrl;
+                
+                let redirectSucceeded = false;
+                const timer = setTimeout(() => {
+                    if(!redirectSucceeded) {
+                       this.switchState('fallback-state');
+                    }
+                }, this.config.timeout);
+
+                const handleVisibilityChange = () => {
+                    if (document.hidden) {
+                        redirectSucceeded = true;
+                        clearTimeout(timer);
+                    }
+                };
+                document.addEventListener('visibilitychange', handleVisibilityChange);
+
+                window.location.href = platformConfig.appUrl;
+            },
+
+            showDesktopInstructions() {
+                const pageUrl = window.location.href;
+                // Используем бесплатный API для генерации QR-кода
+                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(pageUrl)}`;
+                this.dom.qrCodeImg.src = qrApiUrl;
+                this.switchState('desktop-state');
+            },
+
+            initConstellation() {
+                const canvas = document.getElementById('constellation-bg');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                let w = canvas.width = window.innerWidth;
+                let h = canvas.height = window.innerHeight;
+                
+                let mouse = { x: w / 2, y: h / 2 };
+                document.addEventListener('mousemove', e => {
+                    mouse.x = e.clientX;
+                    mouse.y = e.clientY;
+                });
+
+                const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const pointColor = isDarkMode ? 'rgba(156, 179, 208, 0.5)' : 'rgba(90, 107, 123, 0.5)';
+                const lineColor = isDarkMode ? 'rgba(156, 179, 208, 0.1)' : 'rgba(90, 107, 123, 0.1)';
+
+                let particles = [];
+                const properties = {
+                    particleCount: 60,
+                    particleRadius: 3,
+                    particleSpeed: 0.5,
+                    lineLength: 150,
+                    mouseRadius: 200
+                };
+
+                class Particle {
+                    constructor() {
+                        this.x = Math.random() * w;
+                        this.y = Math.random() * h;
+                        this.vx = Math.random() * (properties.particleSpeed * 2) - properties.particleSpeed;
+                        this.vy = Math.random() * (properties.particleSpeed * 2) - properties.particleSpeed;
+                        this.radius = Math.random() * properties.particleRadius;
+                    }
+                    position() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+                        if(this.x > w) this.x = 0;
+                        if(this.x < 0) this.x = w;
+                        if(this.y > h) this.y = 0;
+                        if(this.y < 0) this.y = h;
+                    }
+                    draw() {
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                        ctx.closePath();
+                        ctx.fillStyle = pointColor;
+                        ctx.fill();
+                    }
+                }
+
+                function createParticles() {
+                    for(let i = 0; i < properties.particleCount; i++) {
+                        particles.push(new Particle());
+                    }
+                }
+
+                function drawLines() {
+                    let p1, p2;
+                    for(let i = 0; i < particles.length; i++) {
+                        for(let j = i + 1; j < particles.length; j++) {
+                            p1 = particles[i];
+                            p2 = particles[j];
+                            let dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+                            if(dist < properties.lineLength) {
+                                let opacity = 1 - dist / properties.lineLength;
+                                ctx.beginPath();
+                                ctx.moveTo(p1.x, p1.y);
+                                ctx.lineTo(p2.x, p2.y);
+                                ctx.closePath();
+                                ctx.strokeStyle = lineColor.replace('0.1', opacity);
+                                ctx.stroke();
+                            }
+                        }
+                    }
+                }
+                
+                function drawMouseLine() {
+                    for(let i = 0; i < particles.length; i++) {
+                        let dist = Math.sqrt(Math.pow(mouse.x - particles[i].x, 2) + Math.pow(mouse.y - particles[i].y, 2));
+                        if(dist < properties.mouseRadius) {
+                            let opacity = 1 - dist / properties.mouseRadius;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.closePath();
+                            ctx.strokeStyle = pointColor.replace('0.5', opacity * 0.5);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                function loop() {
+                    ctx.clearRect(0, 0, w, h);
+                    particles.forEach(p => { p.position(); p.draw(); });
+                    drawLines();
+                    drawMouseLine();
+                    requestAnimationFrame(loop);
+                }
+
+                createParticles();
+                loop();
+                
+                window.addEventListener('resize', () => {
+                    w = canvas.width = window.innerWidth;
+                    h = canvas.height = window.innerHeight;
+                });
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => AppRedirect.init());
     </script>
 </body>
 </html>
