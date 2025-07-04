@@ -4,136 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Открываем GuruApp...</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Можно использовать кастомный шрифт, если есть, или оставить системный -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet"> -->
     <style>
         :root {
-            --primary-color: #007aff; /* Основной цвет (синий) */
-            --background-color: #f0f2f5;
-            --card-background: #ffffff;
-            --text-color-primary: #1c1c1e;
-            --text-color-secondary: #6c757d;
+            /* Светлая тема */
+            --bg-grad-start: #e9eef2;
+            --bg-grad-end: #f5f7fa;
+            --card-bg: #ffffff;
+            --card-shadow: 0 16px 40px rgba(0, 38, 77, 0.1);
+            --text-primary: #0a1929;
+            --text-secondary: #5a6b7b;
+            --accent-color: #007aff;
+            --accent-color-hover: #0062cc;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Темная тема */
+                --bg-grad-start: #1c2530;
+                --bg-grad-end: #0f141a;
+                --card-bg: #1d2836;
+                --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+                --text-primary: #e6f1ff;
+                --text-secondary: #9cb3d0;
+            }
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            /* Используем Manrope, если подключен, иначе - лучший системный шрифт */
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color-primary);
+            background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
+            color: var(--text-primary);
         }
 
         .container {
-            background-color: var(--card-background);
+            background-color: var(--card-bg);
             padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
             text-align: center;
-            max-width: 320px;
+            max-width: 340px;
             width: 90%;
             box-sizing: border-box;
-            transition: all 0.3s ease;
         }
 
-        .app-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 20px;
-            background-color: var(--primary-color);
-            border-radius: 16px;
+        /* --- Анимированный логотип-загрузчик --- */
+        .logo-loader {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+        }
+        
+        .logo-placeholder {
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent-color);
+            border-radius: 24px;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: 40px;
+            font-weight: 700;
             color: white;
-            /* Простой SVG-значок в качестве плейсхолдера. Можно заменить на <img> с логотипом. */
+            /* Замените 'G' на первую букву вашего приложения */
+            z-index: 2;
+            position: relative;
         }
         
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border-left-color: var(--primary-color);
-            animation: spin 1s linear infinite;
-            margin: 0 auto 24px;
+        .pulse-ring {
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            border: 4px solid rgba(0, 122, 255, 0.2);
+            border-radius: 30px;
+            animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
+            z-index: 1;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
+        /* --- Стили текста и кнопки --- */
         h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.6rem;
+            font-weight: 700;
             margin: 0 0 10px;
         }
 
         p {
             font-size: 1rem;
-            color: var(--text-color-secondary);
+            color: var(--text-secondary);
             margin: 0;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
-        /* Блок с запасным вариантом */
-        .fallback {
-            margin-top: 30px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-        
-        .fallback.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         .button-primary {
             display: inline-block;
-            background-color: var(--primary-color);
+            background-color: var(--accent-color);
             color: white;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 1rem;
-            padding: 12px 24px;
+            padding: 14px 28px;
             border-radius: 12px;
-            margin-top: 15px;
-            transition: background-color 0.2s ease, transform 0.2s ease;
+            margin-top: 25px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
         }
         
-        .button-primary:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
+        .button-primary:hover, .button-primary:focus {
+            background-color: var(--accent-color-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 122, 255, 0.25);
         }
         
-        /* Утилитарные классы для скрытия элементов */
+        /* --- Управление видимостью и анимациями --- */
         .hidden {
-            display: none !important;
+            display: none;
+        }
+
+        /* Анимация появления для fallback блока */
+        .fallback-state.visible > * {
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Задержка для последовательного появления */
+        .fallback-state.visible h1 { animation-delay: 0.1s; }
+        .fallback-state.visible p { animation-delay: 0.2s; }
+        .fallback-state.visible a { animation-delay: 0.3s; }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Этот блок виден изначально -->
+        <!-- Начальное состояние -->
         <div id="initial-state">
-            <div class="spinner"></div>
-            <h1>Перенаправляем в GuruApp...</h1>
-            <p>Пожалуйста, подождите.</p>
+            <div class="logo-loader">
+                <div class="logo-placeholder">G</div>
+                <div class="pulse-ring"></div>
+            </div>
+            <h1>Подготавливаем ваш переход...</h1>
+            <p>Это займет всего секунду.</p>
         </div>
 
-        <!-- Этот блок появится, если перенаправление не удалось -->
-        <div id="fallback-state" class="fallback">
-            <div class="app-icon">
-                <!-- SVG иконка "открыть" -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-                    <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-                </svg>
-            </div>
-            <h1>Проблема с переходом?</h1>
-            <p>Если приложение не открылось, вы можете перейти в магазин, чтобы установить или открыть его вручную.</p>
+        <!-- Состояние, если переход не удался -->
+        <div id="fallback-state" class="hidden">
+            <h1>Не удалось открыть приложение?</h1>
+            <p>Ничего страшного. Вы можете установить GuruApp или открыть его вручную из официального магазина.</p>
             <a id="store-link" href="#" class="button-primary">Перейти в магазин</a>
         </div>
     </div>
@@ -141,31 +178,27 @@
     <script>
         (function() {
             // --- Конфигурация ---
-            // ВАЖНО: Убедитесь, что схема 'rewardguru://' и пакет 'com.advertapp.android' верны.
             const config = {
                 ios: {
-                    appUrl: 'rewardguru://', // Схема для запуска iOS приложения
+                    appUrl: 'rewardguru://',
                     storeUrl: 'https://apps.apple.com/ru/app/guruapp-работа-на-дому/id1518650617'
                 },
                 android: {
-                    // Используем Intent-ссылку для Android. Это самый надежный способ.
-                    // Он пытается открыть приложение, а если не получается, перенаправляет в Play Store.
                     appUrl: 'intent://open#Intent;package=com.advertapp.android;scheme=rewardguru;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.advertapp.android;end',
                     storeUrl: 'https://play.google.com/store/apps/details?id=com.advertapp.android'
                 },
-                // Ссылка для десктопа или других ОС
                 desktopStoreUrl: 'https://apps.apple.com/ru/app/guruapp-работа-на-дому/id1518650617'
             };
 
-            // --- Определение платформы ---
-            const ua = navigator.userAgent.toLowerCase();
-            const isIOS = /iphone|ipad|ipod/.test(ua);
-            const isAndroid = /android/.test(ua);
-            
-            // --- Получение элементов DOM ---
+            // --- Элементы DOM ---
             const initialState = document.getElementById('initial-state');
             const fallbackState = document.getElementById('fallback-state');
             const storeLink = document.getElementById('store-link');
+            
+            // --- Логика редиректа ---
+            const ua = navigator.userAgent.toLowerCase();
+            const isIOS = /iphone|ipad|ipod/.test(ua);
+            const isAndroid = /android/.test(ua);
             
             let platformConfig;
 
@@ -174,32 +207,43 @@
             } else if (isAndroid) {
                 platformConfig = config.android;
             } else {
-                // Если это десктоп, сразу показываем ошибку
+                // Обработка десктопа
                 initialState.classList.add('hidden');
-                fallbackState.classList.add('visible');
+                fallbackState.classList.remove('hidden');
+                fallbackState.classList.add('visible'); // Добавляем класс для анимации
                 fallbackState.querySelector('h1').innerText = 'Только для мобильных';
-                fallbackState.querySelector('p').innerText = 'Эту страницу нужно открыть на вашем смартфоне.';
+                fallbackState.querySelector('p').innerText = 'Откройте эту страницу на своем iPhone или Android-смартфоне.';
                 storeLink.href = config.desktopStoreUrl;
                 storeLink.innerText = 'Узнать больше';
                 return;
             }
 
-            // Устанавливаем ссылку для fallback-кнопки
             storeLink.href = platformConfig.storeUrl;
+            
+            let timer;
+
+            // Функция, которая покажет запасной вариант
+            const showFallback = () => {
+                initialState.classList.add('hidden');
+                fallbackState.classList.remove('hidden');
+                fallbackState.classList.add('visible'); // Запускаем анимацию появления
+            };
+
+            // Слушаем событие: если вкладка стала невидимой, значит, редирект сработал.
+            // В этом случае отменяем показ запасного варианта.
+            const handleVisibilityChange = () => {
+                if (document.hidden) {
+                    clearTimeout(timer);
+                }
+            };
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+
+            // Устанавливаем таймер. Если за 2.5 секунды вкладка не стала невидимой,
+            // считаем, что редирект не удался, и показываем fallback.
+            timer = setTimeout(showFallback, 2500);
             
             // Пытаемся открыть приложение
             window.location.href = platformConfig.appUrl;
-
-            // Если через 2.5 секунды пользователь все еще на этой странице,
-            // значит, приложение не установлено или не открылось.
-            // Показываем запасной вариант.
-            setTimeout(function() {
-                // Прячем начальное состояние
-                initialState.classList.add('hidden');
-                
-                // Показываем fallback-блок с плавной анимацией
-                fallbackState.classList.add('visible');
-            }, 2500);
         })();
     </script>
 </body>
